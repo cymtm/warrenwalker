@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 
 interface TypeWriterProps {
   text: string;
@@ -8,7 +8,7 @@ interface TypeWriterProps {
   style?: React.CSSProperties;
 }
 
-export const TypeWriter: React.FC<TypeWriterProps> = ({ 
+export const TypeWriter = memo<TypeWriterProps>(({ 
   text, 
   speed = 30, 
   onComplete, 
@@ -18,6 +18,13 @@ export const TypeWriter: React.FC<TypeWriterProps> = ({
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Memoize the completion callback
+  const handleComplete = useCallback(() => {
+    if (onComplete && currentIndex === text.length) {
+      onComplete();
+    }
+  }, [onComplete, currentIndex, text.length]);
+
   useEffect(() => {
     if (currentIndex < text.length) {
       const timeout = setTimeout(() => {
@@ -26,10 +33,10 @@ export const TypeWriter: React.FC<TypeWriterProps> = ({
       }, speed);
 
       return () => clearTimeout(timeout);
-    } else if (onComplete && currentIndex === text.length) {
-      onComplete();
+    } else {
+      handleComplete();
     }
-  }, [currentIndex, text, speed, onComplete]);
+  }, [currentIndex, text, speed, handleComplete]);
 
   // Reset when text changes
   useEffect(() => {
@@ -45,4 +52,6 @@ export const TypeWriter: React.FC<TypeWriterProps> = ({
       )}
     </span>
   );
-};
+});
+
+TypeWriter.displayName = 'TypeWriter';
