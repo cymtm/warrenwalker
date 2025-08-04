@@ -6,7 +6,7 @@ import { AchievementNotification, AchievementsPanel } from './components/Achieve
 import { getRandomWarren, getWeightedWarren } from './data/warrens'
 import { achievements, checkAchievements } from './data/achievements'
 import { checkDiscoveries } from './data/discoveries'
-import { GameState, Fragment, GamePhase, Achievement, Discovery } from './types/game'
+import { GameState, Fragment, GamePhase, Achievement, Discovery, GameSettings } from './types/game'
 
 function App() {
   const [gameState, setGameState] = useState<GameState>({
