@@ -255,3 +255,400 @@
   90% { transform: translate(0px, 1px); }
   100% { transform: translate(0px, 0px); }
 }
+
+/* Settings Menu Styles */
+.settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.settings-menu {
+  background-color: #1a1a1a;
+  border: 2px solid #333;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  color: #fff;
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #333;
+}
+
+.settings-header h2 {
+  margin: 0;
+  color: #ffd700;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  color: #ff6b6b;
+}
+
+.settings-content {
+  padding: 1.5rem;
+}
+
+.setting-group {
+  margin-bottom: 1.5rem;
+}
+
+.setting-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: #ddd;
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.slider {
+  flex: 1;
+  height: 4px;
+  background: #333;
+  outline: none;
+  border-radius: 2px;
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #ffd700;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #ffd700;
+  cursor: pointer;
+  border-radius: 50%;
+  border: none;
+}
+
+.slider-value {
+  color: #ffd700;
+  font-weight: bold;
+  min-width: 60px;
+}
+
+.setting-select {
+  width: 100%;
+  padding: 0.5rem;
+  background: #333;
+  border: 1px solid #555;
+  color: #fff;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+.checkbox-label {
+  display: flex !important;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #ffd700;
+}
+
+.settings-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #333;
+  text-align: center;
+}
+
+.apply-button {
+  background: #ffd700;
+  color: #000;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.apply-button:hover {
+  background: #ffed4e;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* Achievement Styles */
+.achievement-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: #000;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 1000;
+  animation: slideInRight 0.5s ease, pulse 2s ease-in-out 0.5s;
+  max-width: 300px;
+}
+
+.achievement-icon {
+  font-size: 2rem;
+  animation: bounce 0.6s ease;
+}
+
+.achievement-content {
+  flex: 1;
+}
+
+.achievement-title {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.achievement-name {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.achievement-description {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.achievements-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.achievements-panel {
+  background-color: #1a1a1a;
+  border: 2px solid #333;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: hidden;
+  color: #fff;
+}
+
+.achievements-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #333;
+}
+
+.achievements-header h2 {
+  margin: 0;
+  color: #ffd700;
+}
+
+.achievement-progress {
+  color: #ddd;
+  font-size: 0.9rem;
+}
+
+.achievements-list {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.achievement-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.achievement-item.unlocked {
+  background-color: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.achievement-item.locked {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0.6;
+}
+
+.achievement-icon-small {
+  font-size: 1.5rem;
+  min-width: 2rem;
+}
+
+.achievement-details {
+  flex: 1;
+}
+
+.achievement-item .achievement-name {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.achievement-item.unlocked .achievement-name {
+  color: #ffd700;
+}
+
+.achievement-item .achievement-description {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+/* Animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 30px rgba(255, 215, 0, 0.6);
+  }
+}
+
+/* Menu Button Styles */
+.menu-buttons {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 100;
+}
+
+.menu-button {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid currentColor;
+  color: inherit;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.menu-button:hover {
+  background: currentColor;
+  color: #000;
+}
+
+/* Enhanced Warren Styles */
+.time-warren {
+  animation: timeWarp 3s ease-in-out infinite;
+}
+
+.echo-warren {
+  animation: echoRipple 2s ease-in-out infinite;
+}
+
+.void-warren {
+  animation: voidPulse 4s ease-in-out infinite;
+}
+
+@keyframes timeWarp {
+  0%, 100% { 
+    transform: scale(1);
+    filter: hue-rotate(0deg);
+  }
+  33% { 
+    transform: scale(1.01);
+    filter: hue-rotate(10deg);
+  }
+  66% { 
+    transform: scale(0.99);
+    filter: hue-rotate(-10deg);
+  }
+}
+
+@keyframes echoRipple {
+  0%, 100% { 
+    box-shadow: inset 0 0 0 0px currentColor;
+  }
+  50% { 
+    box-shadow: inset 0 0 0 2px currentColor;
+  }
+}
+
+@keyframes voidPulse {
+  0%, 100% { 
+    background-color: #000000;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.1);
+  }
+  50% { 
+    background-color: #0a0a0a;
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.05);
+  }
+}

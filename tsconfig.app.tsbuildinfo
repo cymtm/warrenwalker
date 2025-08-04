@@ -1,1 +1,1 @@
-{"root":["./src/App.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/TypeWriter.tsx","./src/data/warrens.ts","./src/types/game.ts"],"version":"5.8.3"}
+{"root":["./src/App.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/Achievements.tsx","./src/components/SettingsMenu.tsx","./src/components/TypeWriter.tsx","./src/data/achievements.ts","./src/data/discoveries.ts","./src/data/warrens.ts","./src/types/game.ts"],"version":"5.8.3"}
