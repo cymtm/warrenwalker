@@ -271,7 +271,7 @@ export const getWeightedWarren = (criteria: WarrenSelectionCriteria): Warren => 
     const rareWarrens = ['time', 'echo', 'void'];
     const rareWarrenInstances = availableWarrens.filter(w => rareWarrens.includes(w.type));
     
-    if (rareWarrenInstances.length > 0 && Math.random() < 0.4) {
+    if (rareWarrenInstances.length > 0 && Math.random() < RARE_WARREN_PROBABILITY) {
       return rareWarrenInstances[Math.floor(Math.random() * rareWarrenInstances.length)];
     }
   }
