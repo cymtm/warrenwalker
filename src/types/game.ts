@@ -26,6 +26,23 @@ export interface Fragment {
   description?: string;
 }
 
+export interface Achievement {
+  id: string;
+  name: string;
+  description: string;
+  unlocked: boolean;
+  condition: (gameState: GameState) => boolean;
+  hidden?: boolean;
+}
+
+export interface Discovery {
+  id: string;
+  name: string;
+  description: string;
+  warrenType: WarrenType;
+  requiresStats?: Partial<GameState['stats']>;
+}
+
 export interface GameState {
   currentLayer: number;
   maxLayers: number;
@@ -37,9 +54,21 @@ export interface GameState {
   };
   isGameOver: boolean;
   currentWarren?: Warren;
+  achievements: Achievement[];
+  discoveries: Discovery[];
+  settings: GameSettings;
+  visitedWarrens: WarrenType[];
 }
 
-export type WarrenType = 'memory' | 'shadow' | 'pain' | 'dream' | 'entropy';
+export interface GameSettings {
+  textSpeed: number;
+  difficulty: 'easy' | 'normal' | 'hard';
+  autoAdvance: boolean;
+  showStats: boolean;
+  soundEnabled: boolean;
+}
+
+export type WarrenType = 'memory' | 'shadow' | 'pain' | 'dream' | 'entropy' | 'time' | 'echo' | 'void';
 
 export interface WarrenStyle {
   backgroundColor: string;

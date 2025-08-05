@@ -3,6 +3,7 @@ import './App.css'
 import { TypeWriter } from './components/TypeWriter'
 import { getRandomWarren } from './data/warrens'
 import { GameState, Fragment, GamePhase } from './types/game'
+import { achievements } from './data/achievements'
 
 function App() {
   const [gameState, setGameState] = useState<GameState>({
@@ -14,7 +15,17 @@ function App() {
       memory: 5,
       perception: 5
     },
-    isGameOver: false
+    isGameOver: false,
+    achievements: achievements.map(a => ({ ...a, unlocked: false })),
+    discoveries: [],
+    settings: {
+      textSpeed: 50,
+      difficulty: 'normal',
+      autoAdvance: false,
+      showStats: true,
+      soundEnabled: false
+    },
+    visitedWarrens: []
   });
 
   const [gamePhase, setGamePhase] = useState<GamePhase>('intro');
@@ -32,13 +43,17 @@ function App() {
         memory: 5,
         perception: 5
       },
-      isGameOver: false
+      isGameOver: false,
+      achievements: achievements.map(a => ({ ...a, unlocked: false })),
+      discoveries: [],
+      settings: gameState.settings, // Preserve settings
+      visitedWarrens: []
     });
     setGamePhase('intro');
     setCurrentText("You wake. The world isn't yours. It never was.\n\nYou are a Warrenwalker, slipping between layers of broken reality.\nEach Warren you enter changes the rules of existence itself.\n\nThe descent begins...");
     setShowChoices(false);
     setIsTextComplete(false);
-  }, []);
+  }, [gameState.settings]);
 
   const enterWarren = useCallback(() => {
     const warren = getRandomWarren();
