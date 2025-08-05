@@ -73,7 +73,7 @@ export const achievements: Achievement[] = [
     hidden: true,
     condition: (gameState: GameState) => {
       const uniqueWarrens = new Set(gameState.visitedWarrens);
-      return uniqueWarrens.size >= 7; // Assuming 8 total warren types, need 7 for this achievement
+      return uniqueWarrens.size >= WARREN_TYPES.length;
     }
   },
   {
