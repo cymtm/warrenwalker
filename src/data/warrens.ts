@@ -29,6 +29,12 @@ export const warrens: Warren[] = [
         result: "You find a fragment of yourself, but it doesn't fit who you are now.",
         fragmentChance: 0.8,
         statEffect: { perception: 1 }
+      },
+      {
+        text: "Call out to someone you've lost",
+        result: "A familiar voice answers from the mist. They offer you a choice you thought was already made.",
+        fragmentChance: 0.5,
+        statEffect: { memory: -1, sanity: 2, perception: 1 }
       }
     ]
   },
@@ -59,6 +65,12 @@ export const warrens: Warren[] = [
         result: "Shadows multiply, swallowing the flame. In the darkness, you see truth.",
         fragmentChance: 0.7,
         statEffect: { perception: 2 }
+      },
+      {
+        text: "Trust the illusions",
+        result: "What seemed false becomes real. The shadows reshape themselves to accommodate your faith.",
+        fragmentChance: 0.6,
+        statEffect: { sanity: -2, memory: 1, perception: 2 }
       }
     ]
   },
@@ -120,6 +132,12 @@ export const warrens: Warren[] = [
         result: "2+2 equals the sound of rain. Causality is just a rumor here.",
         fragmentChance: 0.3,
         statEffect: { sanity: 1 }
+      },
+      {
+        text: "Become a metaphor",
+        result: "You are both the question and the answer now. Existence tastes like purple lightning.",
+        fragmentChance: 0.8,
+        statEffect: { perception: 2, memory: 2, sanity: -3 }
       }
     ]
   },
