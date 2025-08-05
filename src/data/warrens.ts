@@ -279,18 +279,18 @@ export const getWeightedWarren = (criteria: WarrenSelectionCriteria): Warren => 
   // Stat-based warren selection
   if (stats.perception >= 7 && !visitedWarrens.includes('void')) {
     const voidWarren = availableWarrens.find(w => w.type === 'void');
-    if (voidWarren && Math.random() < 0.3) return voidWarren;
+    if (voidWarren && Math.random() < VOID_WARREN_PROBABILITY) return voidWarren;
   }
   
   if (stats.memory >= 6 && !visitedWarrens.includes('time')) {
     const timeWarren = availableWarrens.find(w => w.type === 'time');
-    if (timeWarren && Math.random() < 0.25) return timeWarren;
+    if (timeWarren && Math.random() < TIME_WARREN_PROBABILITY) return timeWarren;
   }
   
   if (stats.sanity <= 2) {
     // Low sanity increases chance of encountering disturbing warrens
     const darkWarrens = availableWarrens.filter(w => ['shadow', 'pain', 'entropy'].includes(w.type));
-    if (darkWarrens.length > 0 && Math.random() < 0.5) {
+    if (darkWarrens.length > 0 && Math.random() < DARK_WARREN_PROBABILITY) {
       return darkWarrens[Math.floor(Math.random() * darkWarrens.length)];
     }
   }
