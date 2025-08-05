@@ -1,4 +1,5 @@
 import { Achievement, GameState } from '../types/game';
+import { WARREN_TYPES } from './constants';
 
 export const achievements: Achievement[] = [
   {

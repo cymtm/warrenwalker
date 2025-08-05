@@ -1,4 +1,5 @@
 import { Warren } from '../types/game';
+import { RARE_WARREN_PROBABILITY, VOID_WARREN_PROBABILITY, TIME_WARREN_PROBABILITY, DARK_WARREN_PROBABILITY } from './constants';
 
 export const warrens: Warren[] = [
   {
@@ -217,7 +218,7 @@ export const warrens: Warren[] = [
   {
     name: "Void Warren",
     type: "void",
-    description: "Nothing. No, less than nothing. The absence of absence. It looks back at you with eyes that don't exist.",
+    description: "Void stares back. Eyes that aren't there watch everything.",
     style: {
       backgroundColor: "#000000",
       textColor: "#ffffff",
@@ -227,19 +228,19 @@ export const warrens: Warren[] = [
     choices: [
       {
         text: "Embrace the emptiness",
-        result: "You become nothing, and in becoming nothing, you understand everything. The void is not empty.",
+        result: "Becoming nothing teaches you everything. Void isn't empty.",
         fragmentChance: 1.0,
         statEffect: { perception: 4, sanity: -3, memory: -1 }
       },
       {
         text: "Fight to remain yourself",
-        result: "You cling to identity like a life raft. But what is self in a place that has no concept of existence?",
+        result: "Identity clings like drowning. Self means nothing here.",
         fragmentChance: 0.3,
         statEffect: { sanity: 1, memory: 1 }
       },
       {
         text: "Ask the void a question",
-        result: "It answers without words, without sound, without meaning. Yet you understand perfectly.",
+        result: "Silent answers. Wordless understanding. Perfect clarity.",
         fragmentChance: 0.9,
         statEffect: { perception: 3, memory: 2, sanity: -2 }
       }
