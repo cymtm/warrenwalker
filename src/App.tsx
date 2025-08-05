@@ -6,6 +6,8 @@ import { AchievementNotification, AchievementsPanel } from './components/Achieve
 import { getRandomWarren, getWeightedWarren } from './data/warrens'
 import { achievements, checkAchievements } from './data/achievements'
 import { checkDiscoveries } from './data/discoveries'
+import { LAYER_WEIGHTED_WARREN_THRESHOLD, ENDING_FRAGMENT_THRESHOLD, ENDING_DISCOVERY_THRESHOLD } from './data/constants'
+import { validateSettings, rateLimitActions } from './utils/security'
 import { GameState, Fragment, GamePhase, Achievement, Discovery, GameSettings } from './types/game'
 
 function App() {
@@ -39,6 +41,7 @@ function App() {
   const [showAchievements, setShowAchievements] = useState(false);
   const [pendingAchievement, setPendingAchievement] = useState<Achievement | null>(null);
   const [currentDiscoveries, setCurrentDiscoveries] = useState<Discovery[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const startNewGame = useCallback(() => {
     setGameState({
@@ -89,8 +92,15 @@ function App() {
   }, [gameState.stats, gameState.currentLayer, gameState.visitedWarrens]);
 
   const makeChoice = useCallback((choiceIndex: number) => {
-    if (!gameState.currentWarren) return;
+    if (!gameState.currentWarren || isLoading) return;
+    
+    // Rate limiting to prevent spam
+    if (!rateLimitActions('makeChoice')) {
+      console.warn('Rate limit exceeded for choice selection');
+      return;
+    }
 
+    setIsLoading(true);
     const choice = gameState.currentWarren.choices[choiceIndex];
     let resultText = choice.result;
     
@@ -100,76 +110,80 @@ function App() {
       resultText += `\n\n[Discovery: ${discovery.name}]\n${discovery.description}`;
     }
     
-    setGamePhase('result');
-    setCurrentText(resultText);
-    setShowChoices(false);
-    setIsTextComplete(false);
+    // Simulate processing time for better UX
+    setTimeout(() => {
+      setGamePhase('result');
+      setCurrentText(resultText);
+      setShowChoices(false);
+      setIsTextComplete(false);
+      setIsLoading(false);
 
-    // Apply stat effects and potentially collect fragment
-    setGameState(prev => {
-      const newStats = { ...prev.stats };
-      if (choice.statEffect) {
-        if (choice.statEffect.sanity) newStats.sanity += choice.statEffect.sanity;
-        if (choice.statEffect.memory) newStats.memory += choice.statEffect.memory;
-        if (choice.statEffect.perception) newStats.perception += choice.statEffect.perception;
-        
-        // Apply difficulty modifiers
-        if (prev.settings.difficulty === 'easy') {
-          // Reduce negative effects on easy
-          if (choice.statEffect.sanity && choice.statEffect.sanity < 0) newStats.sanity += 1;
-          if (choice.statEffect.memory && choice.statEffect.memory < 0) newStats.memory += 1;
-          if (choice.statEffect.perception && choice.statEffect.perception < 0) newStats.perception += 1;
-        } else if (prev.settings.difficulty === 'hard') {
-          // Increase negative effects on hard
-          if (choice.statEffect.sanity && choice.statEffect.sanity < 0) newStats.sanity -= 1;
-          if (choice.statEffect.memory && choice.statEffect.memory < 0) newStats.memory -= 1;
-          if (choice.statEffect.perception && choice.statEffect.perception < 0) newStats.perception -= 1;
+      // Apply stat effects and potentially collect fragment
+      setGameState(prev => {
+        const newStats = { ...prev.stats };
+        if (choice.statEffect) {
+          if (choice.statEffect.sanity) newStats.sanity += choice.statEffect.sanity;
+          if (choice.statEffect.memory) newStats.memory += choice.statEffect.memory;
+          if (choice.statEffect.perception) newStats.perception += choice.statEffect.perception;
+          
+          // Apply difficulty modifiers
+          if (prev.settings.difficulty === 'easy') {
+            // Reduce negative effects on easy
+            if (choice.statEffect.sanity && choice.statEffect.sanity < 0) newStats.sanity += 1;
+            if (choice.statEffect.memory && choice.statEffect.memory < 0) newStats.memory += 1;
+            if (choice.statEffect.perception && choice.statEffect.perception < 0) newStats.perception += 1;
+          } else if (prev.settings.difficulty === 'hard') {
+            // Increase negative effects on hard
+            if (choice.statEffect.sanity && choice.statEffect.sanity < 0) newStats.sanity -= 1;
+            if (choice.statEffect.memory && choice.statEffect.memory < 0) newStats.memory -= 1;
+            if (choice.statEffect.perception && choice.statEffect.perception < 0) newStats.perception -= 1;
+          }
         }
-      }
 
-      // Cap stats
-      newStats.sanity = Math.max(0, Math.min(10, newStats.sanity));
-      newStats.memory = Math.max(0, Math.min(10, newStats.memory));
-      newStats.perception = Math.max(0, Math.min(10, newStats.perception));
+        // Cap stats
+        newStats.sanity = Math.max(0, Math.min(10, newStats.sanity));
+        newStats.memory = Math.max(0, Math.min(10, newStats.memory));
+        newStats.perception = Math.max(0, Math.min(10, newStats.perception));
 
-      const newFragments = [...prev.fragments];
-      let fragmentChance = choice.fragmentChance || 0;
-      
-      // Apply difficulty modifiers to fragment chance
-      if (prev.settings.difficulty === 'easy') {
-        fragmentChance *= 1.3;
-      } else if (prev.settings.difficulty === 'hard') {
-        fragmentChance *= 0.7;
-      }
-      
-      if (fragmentChance > 0 && Math.random() < fragmentChance) {
-        const fragment: Fragment = {
-          name: `Shard of ${prev.currentWarren!.name}`,
-          source: prev.currentWarren!.name,
-          layer: prev.currentLayer,
-          description: `A fragment torn from the ${prev.currentWarren!.type} warren`
+        const newFragments = [...prev.fragments];
+        let fragmentChance = choice.fragmentChance || 0;
+        
+        // Apply difficulty modifiers to fragment chance
+        if (prev.settings.difficulty === 'easy') {
+          fragmentChance *= 1.3;
+        } else if (prev.settings.difficulty === 'hard') {
+          fragmentChance *= 0.7;
+        }
+        
+        if (fragmentChance > 0 && Math.random() < fragmentChance) {
+          const fragment: Fragment = {
+            name: `Shard of ${prev.currentWarren!.name}`,
+            source: prev.currentWarren!.name,
+            layer: prev.currentLayer,
+            description: `A fragment torn from the ${prev.currentWarren!.type} warren`
+          };
+          newFragments.push(fragment);
+        }
+
+        const newDiscoveries = [...prev.discoveries, ...currentDiscoveries];
+
+        const updatedState = {
+          ...prev,
+          stats: newStats,
+          fragments: newFragments,
+          discoveries: newDiscoveries
         };
-        newFragments.push(fragment);
-      }
 
-      const newDiscoveries = [...prev.discoveries, ...currentDiscoveries];
+        // Check for achievements
+        const newAchievements = checkAchievements(updatedState);
+        if (newAchievements.length > 0) {
+          setPendingAchievement(newAchievements[0]);
+        }
 
-      const updatedState = {
-        ...prev,
-        stats: newStats,
-        fragments: newFragments,
-        discoveries: newDiscoveries
-      };
-
-      // Check for achievements
-      const newAchievements = checkAchievements(updatedState);
-      if (newAchievements.length > 0) {
-        setPendingAchievement(newAchievements[0]);
-      }
-
-      return updatedState;
-    });
-  }, [gameState.currentWarren, currentDiscoveries]);
+        return updatedState;
+      });
+    }, 400); // Brief delay for better UX
+  }, [gameState.currentWarren, currentDiscoveries, isLoading]);
 
   const proceedToNextLayer = useCallback(() => {
     setGameState(prev => {
@@ -232,6 +246,12 @@ function App() {
   }, [gamePhase, enterWarren, proceedToNextLayer, gameState.settings.autoAdvance]);
 
   const handleSettingsChange = useCallback((newSettings: GameSettings) => {
+    // Validate settings for security
+    if (!validateSettings(newSettings)) {
+      console.error('Invalid settings provided');
+      return;
+    }
+    
     setGameState(prev => ({
       ...prev,
       settings: newSettings
@@ -241,6 +261,25 @@ function App() {
   useEffect(() => {
     startNewGame();
   }, [startNewGame]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (showSettings || showAchievements || !showChoices || isLoading) return;
+      
+      const key = event.key;
+      if (key >= '1' && key <= '9') {
+        const choiceIndex = parseInt(key) - 1;
+        if (gameState.currentWarren && choiceIndex < gameState.currentWarren.choices.length) {
+          event.preventDefault();
+          makeChoice(choiceIndex);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [showSettings, showAchievements, showChoices, isLoading, gameState.currentWarren, makeChoice]);
 
   const warrenStyle = gameState.currentWarren?.style;
   const warrenClass = gameState.currentWarren ? `${gameState.currentWarren.type}-warren` : '';
@@ -314,19 +353,29 @@ function App() {
 
         {showChoices && gameState.currentWarren && (
           <div className="choices-container">
+            {isLoading && (
+              <div className="loading-overlay">
+                <div className="loading-spinner">Processing...</div>
+              </div>
+            )}
             {gameState.currentWarren.choices.map((choice, index) => (
               <button
                 key={index}
-                className="choice-button"
+                className={`choice-button ${isLoading ? 'disabled' : ''}`}
                 onClick={() => makeChoice(index)}
+                disabled={isLoading}
                 style={{
                   borderColor: warrenStyle?.textColor || '#fff',
                   color: warrenStyle?.textColor || '#fff'
                 }}
+                title={`Press ${index + 1} or click to select`}
               >
-                {index + 1}. {choice.text}
+                <span className="choice-number">{index + 1}</span>. {choice.text}
               </button>
             ))}
+            <div className="keyboard-hint">
+              Press 1-{gameState.currentWarren.choices.length} or click to choose
+            </div>
           </div>
         )}
 
