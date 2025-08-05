@@ -64,7 +64,7 @@ function App() {
   }, [gameState.settings]);
 
   const enterWarren = useCallback(() => {
-    const warren = gameState.currentLayer >= 3 ? 
+    const warren = gameState.currentLayer >= LAYER_WEIGHTED_WARREN_THRESHOLD ? 
       getWeightedWarren({
         stats: gameState.stats,
         currentLayer: gameState.currentLayer,
