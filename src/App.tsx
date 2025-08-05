@@ -187,7 +187,7 @@ function App() {
       let endingText = '';
       
       // Multiple endings based on different criteria
-      if (fragmentCount >= 6 && discoveryCount >= 3) {
+      if (fragmentCount >= ENDING_FRAGMENT_THRESHOLD && discoveryCount >= ENDING_DISCOVERY_THRESHOLD) {
         endingText = "You have become something more than human.\n\nWith fragments of reality and hidden knowledge burning in your mind, you transcend the boundaries between worlds. The Warrens bow to your will.\n\nYou are no longer a Warrenwalker. You are a Warren Master.";
       } else if (gameState.stats.sanity <= 1) {
         endingText = "Madness is just another country, and you've learned its language.\n\nYou drift through the spaces between thoughts, no longer bound by the crude concept of individual identity. The Warrens welcome their newest permanent resident.";
