@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <style>
+      .bg { fill: #1a1a2e; }
+      .text { fill: #e5dccf; font-family: monospace; font-size: 20px; font-weight: bold; text-anchor: middle; }
+      .shadow { fill: rgba(0,0,0,0.5); }
+    </style>
+  </defs>
+  <rect width="32" height="32" class="bg"/>
+  <rect x="2" y="2" width="28" height="28" fill="none" stroke="#e5dccf" stroke-width="1" opacity="0.3"/>
+  <text x="16" y="22" class="text">W</text>
+  <circle cx="8" cy="8" r="1.5" class="shadow" opacity="0.6"/>
+  <circle cx="24" cy="8" r="1.5" class="shadow" opacity="0.4"/>
+  <circle cx="16" cy="28" r="1" class="shadow" opacity="0.3"/>
+</svg>

@@ -1,5 +1,4 @@
 import { Achievement, GameState } from '../types/game';
-import { WARREN_TYPES } from './constants';
 
 export const achievements: Achievement[] = [
   {
@@ -69,12 +68,12 @@ export const achievements: Achievement[] = [
   {
     id: 'warren_master',
     name: 'Warren Master',
-    description: 'Visit all types of Warrens in a single descent',
+    description: 'Visit 6 different types of Warrens in a single descent',
     unlocked: false,
     hidden: true,
     condition: (gameState: GameState) => {
       const uniqueWarrens = new Set(gameState.visitedWarrens);
-      return uniqueWarrens.size >= WARREN_TYPES.length;
+      return uniqueWarrens.size >= 6;
     }
   },
   {
